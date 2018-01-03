@@ -5,66 +5,55 @@ using System.Text;
 
 namespace TimeKeeper
 {
-   public enum TimeDesignator
-   { 
-      AM,
-      PM
-   }
+    public class TimeSpanRecord : ViewModelBase
+    {
+        DateTime _Start;
+        DateTime _End;
 
-   public class TimeSpanRecord
-   {
-      int AMPMOffset = 12;
+        public TimeSpanRecord()
+        {
 
-      DateTime _Start;
-      DateTime _End;
+        }
 
-      TimeSpan _Span;
-
-      public TimeSpanRecord()
-      { 
-      
-      }
-
-      DateTime ConvertStringToDateTime(string Time, TimeDesignator Designator)
-      {
-         DateTime RetVal = DateTime.MinValue;
-         string[] Split = Time.Split(':');
-         if (Split.Length >= 2)
-         {
-            int Hours = int.Parse(Split[0]);
-            int Minutes = int.Parse(Split[1]);
-
-            if (Designator == TimeDesignator.AM)
+        DateTime ConvertStringToDateTime(string Time)
+        {
+            DateTime RetVal = DateTime.MinValue;
+            try
             {
-               RetVal = new DateTime(0, 0, 0, Hours, Minutes, 0);
+                RetVal = DateTime.Parse(Time);
             }
-            else
+            catch
             {
-               RetVal = new DateTime(0, 0, 0, Hours + AMPMOffset, Minutes, 0);
+                RetVal = DateTime.MinValue;
             }
-         }
 
-         return RetVal;
-      }
+            return RetVal;
+        }
 
-      public string StartString
-      {
-         get { return _Start.ToString("h:mm"); }
-         set
-         {
-            _Start = ConvertStringToDateTime(
-         }
-      }
+        public double GetTimeDouble()
+        {
+            TimeSpan TS = _End - _Start;
+            return TS.Hours + (TS.Minutes / 60.0);
+        }
 
-      public TimeDesignator StartDesignator
-      {
-         get { return _Start.}   
-      }
+        public string StartString
+        {
+            get { return _Start.ToString("h:mm tt"); }
+            set
+            {
+                _Start = ConvertStringToDateTime(value);
+                OnPropertyChanged("StartString");
+            }
+        }
 
-      public string EndString
-      {
-         get { return _End.ToString("h:mm"); }
-      }
-
-   }
+        public string EndString
+        {
+            get { return _End.ToString("h:mm tt"); }
+            set
+            {
+                _End = ConvertStringToDateTime(value);
+                OnPropertyChanged("EndString");
+            }
+        }
+    }
 }
