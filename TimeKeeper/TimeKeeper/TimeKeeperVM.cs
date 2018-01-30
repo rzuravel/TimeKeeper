@@ -9,15 +9,15 @@ namespace TimeKeeper
 {
    public class TimeKeeperVM : ViewModelBase
    {
-        ObservableCollection<TimeSpanRecord> _TimeSpans;
+        ObservableCollection<TimeSpanRecordVM> _TimeSpans;
         double _TotalTime = 0.0;
 
         public TimeKeeperVM()
         {
-            _TimeSpans = new ObservableCollection<TimeSpanRecord>();
+            _TimeSpans = new ObservableCollection<TimeSpanRecordVM>();
         }
 
-        public ObservableCollection<TimeSpanRecord> TimeSpans
+        public ObservableCollection<TimeSpanRecordVM> TimeSpans
         {
             get { return _TimeSpans; }
             set
@@ -29,15 +29,21 @@ namespace TimeKeeper
 
         internal void OnAddTime()
         {
-            _TimeSpans.Add(new TimeSpanRecord());
+            _TimeSpans.Add(new TimeSpanRecordVM(UpdateTotalTime));
+            UpdateTotalTime();
+        }
+
+        internal void OnRemoveTime(TimeSpanRecordVM VMToDelete)
+        {
+            _TimeSpans.Remove(VMToDelete);
         }
 
         void UpdateTotalTime()
         {
             _TotalTime = 0;
-            foreach (TimeSpanRecord TimePiece in _TimeSpans)
+            foreach (TimeSpanRecordVM TimePiece in _TimeSpans)
             {
-                TotalTime += TimePiece.GetTimeDouble();
+                TotalTime += TimePiece.DoubleTime;
             }
         }
 

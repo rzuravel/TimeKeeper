@@ -1,0 +1,40 @@
+﻿<Window x:Class="TimeKeeper.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="TimeKeeper" Height="300" Width="300">
+    <Grid Background="DimGray">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="20"/>
+            <ColumnDefinition/>
+            <ColumnDefinition Width="20"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="20"/>
+            <RowDefinition Height="40"/>
+            <RowDefinition/>
+            <RowDefinition Height="40"/>
+            <RowDefinition Height="20"/>
+        </Grid.RowDefinitions>
+        <Button Grid.Column="1" Grid.Row="1" HorizontalAlignment="Center" Click="Button_Click" Margin="5">
+            <Label Content="Add Time"/>
+        </Button>
+        <ListBox Grid.Column="1" Grid.Row="2" ItemsSource="{Binding TimeSpans}" BorderBrush="Black" MouseRightButtonDown="ListBox_MouseRightButtonDown">
+            <ListBox.ItemTemplate>
+                <DataTemplate>
+                    <Border MouseRightButtonDown="DockPanel_MouseRightButtonDown" Background="Transparent">
+                        <DockPanel>
+                            <TextBox Text="{Binding StartString}" VerticalAlignment="Center" Margin="10" BorderBrush="Transparent"/>
+                            <Label Content="-" VerticalAlignment="Center" Margin="10"/>
+                            <TextBox Text="{Binding EndString}" VerticalAlignment="Center" Margin="10" BorderBrush="Transparent" MouseRightButtonUp="TextBox_MouseRightButtonUp"/>
+                            <TextBlock Text="{Binding DoubleTime}" VerticalAlignment="Center" HorizontalAlignment="Right"/>
+                        </DockPanel>
+                    </Border>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+        </ListBox>
+        <DockPanel Grid.Column="1" Grid.Row="3" HorizontalAlignment="Center">
+            <Label Content="Total Time: " VerticalAlignment="Center" HorizontalAlignment="Center"/>
+            <Label Content="{Binding TotalTime}" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+        </DockPanel>
+    </Grid>
+</Window>

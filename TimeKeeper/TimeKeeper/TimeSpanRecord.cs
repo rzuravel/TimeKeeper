@@ -5,14 +5,21 @@ using System.Text;
 
 namespace TimeKeeper
 {
-    public class TimeSpanRecord : ViewModelBase
+    public class TimeSpanRecordVM : ViewModelBase
     {
         DateTime _Start;
         DateTime _End;
 
-        public TimeSpanRecord()
-        {
+        double _DoubleTime;
 
+        Action _UpdateMasterTime;
+
+        public TimeSpanRecordVM(Action UpdateMasterTime)
+        {
+            _UpdateMasterTime = UpdateMasterTime;
+            _Start = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, 8, 0, 0);
+            _End = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, 17, 0, 0);
+            UpdateDoubleTime();
         }
 
         DateTime ConvertStringToDateTime(string Time)
@@ -30,10 +37,11 @@ namespace TimeKeeper
             return RetVal;
         }
 
-        public double GetTimeDouble()
+        public void UpdateDoubleTime()
         {
             TimeSpan TS = _End - _Start;
-            return TS.Hours + (TS.Minutes / 60.0);
+            DoubleTime = TS.Hours + (TS.Minutes / 60.0);
+            _UpdateMasterTime();
         }
 
         public string StartString
@@ -42,6 +50,7 @@ namespace TimeKeeper
             set
             {
                 _Start = ConvertStringToDateTime(value);
+                UpdateDoubleTime();
                 OnPropertyChanged("StartString");
             }
         }
@@ -52,7 +61,18 @@ namespace TimeKeeper
             set
             {
                 _End = ConvertStringToDateTime(value);
+                UpdateDoubleTime();
                 OnPropertyChanged("EndString");
+            }
+        }
+
+        public double DoubleTime
+        {
+            get { return _DoubleTime; }
+            set
+            {
+                _DoubleTime = value;
+                OnPropertyChanged("DoubleTime");
             }
         }
     }
